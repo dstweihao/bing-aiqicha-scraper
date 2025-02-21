@@ -11,18 +11,20 @@ with open("keywords.txt", "r") as f:
 output_file = "企业名称清单.xlsx"
 
 def bing_search(keyword):
+    # 使用浏览器访问必应搜索页面（关键点1：URL构造）
     driver.get(f"https://cn.bing.com/search?q={keyword}")
-    time.sleep(2)  # 等待加载
+    time.sleep(2)  # 固定等待2秒（关键点2：页面加载等待）
     
     try:
-        # 定位第一个企业名称（根据编号3的必应搜索结果结构）
+        # 关键点3：CSS选择器定位元素
         first_result = driver.find_element(
             By.CSS_SELECTOR, 
-            'li.b_algo h2 a'
+            'li.b_algo h2 a'  # 匹配包含搜索结果的列表项中的标题链接
         )
-        return first_result.text.split(' - ')[0]  # 提取主名称
+        # 关键点4：文本处理（分割获取主名称）
+        return first_result.text.split(' - ')[0]  
     except:
-        return "未找到"
+        return "未找到"  # 异常处理（关键点5）
 
 # 启动浏览器
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
